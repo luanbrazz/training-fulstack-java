@@ -21,11 +21,15 @@ public class Usuario implements UserDetails {
     // Configura a geração automática de valores para a chave primária.
     private Long id;
 
+    @Column(nullable = false)
     private String login; // Campo para armazenar o login do usuário.
+
+    @Column(nullable = false)
     private String senha; // Campo para armazenar a senha do usuário.
 
+    @Column(nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date dataAtualSenha; // Campo para armazenar a data da senha atual.
+    private Date dataAtualSenha;
 
     @OneToMany(fetch = FetchType.LAZY) // Define um relacionamento de um-para-muitos com a entidade Acesso.
 // Define uma tabela de junção chamada "usuario_acesso" para mapear o relacionamento entre "Usuario" e "Acesso".
@@ -59,6 +63,46 @@ public class Usuario implements UserDetails {
             )
     )
     private List<Acesso> acessos; // Lista de acessos associados ao usuário.
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public Date getDataAtualSenha() {
+        return dataAtualSenha;
+    }
+
+    public void setDataAtualSenha(Date dataAtualSenha) {
+        this.dataAtualSenha = dataAtualSenha;
+    }
+
+    public List<Acesso> getAcessos() {
+        return acessos;
+    }
+
+    public void setAcessos(List<Acesso> acessos) {
+        this.acessos = acessos;
+    }
 
     /*Autoridades = são os acessos, ROLE_ADMIN, ROLE_SECRETARIO...*/
     @Override
