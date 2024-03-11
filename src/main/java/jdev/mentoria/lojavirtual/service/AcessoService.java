@@ -18,7 +18,7 @@ public class AcessoService {
     public Acesso save(Acesso acesso){
         try {
             Acesso savedAcesso = acessoRepository.save(acesso);
-            log.error("Acesso salvo: Descrição: {}, ID: {}", savedAcesso.getDescricao(), savedAcesso.getId());
+            log.info("Acesso salvo: Descrição: {}, ID: {}", savedAcesso.getDescricao(), savedAcesso.getId());
             return savedAcesso;
         } catch (Exception e) {
             log.error("Erro ao salvar acesso: {}", e.getMessage());
