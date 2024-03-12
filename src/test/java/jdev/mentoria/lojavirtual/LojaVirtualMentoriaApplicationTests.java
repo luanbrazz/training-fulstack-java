@@ -87,6 +87,58 @@ public class LojaVirtualMentoriaApplicationTests {
     }
 
     @Test
+    public void testRestApiDeleteAcessoPorId() throws Exception {
+        DefaultMockMvcBuilder builder = MockMvcBuilders.webAppContextSetup(this.wac);
+        MockMvc mockMvc = builder.build();
+
+        Acesso acesso = new Acesso();
+        acesso.setDescricao("ROLE_DELETE_ACESSO_ID");
+
+        acesso = acessoRepository.save(acesso);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        ResultActions retornoApi = mockMvc.perform(MockMvcRequestBuilders.delete("/deleteAcessoPorId/" + acesso.getId())
+                .content(objectMapper.writeValueAsString(acesso)).accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        String retornoDaApi = retornoApi.andReturn().getResponse().getContentAsString();
+        String statusDoRetorno = String.valueOf(retornoApi.andReturn().getResponse().getStatus());
+
+        System.out.println("Retorno da API: " + retornoDaApi);
+        System.out.println("Status do retorno: " + statusDoRetorno);
+
+        assertEquals("Acesso removido - ID: " + acesso.getId(), retornoDaApi);
+        assertEquals("200", statusDoRetorno);
+    }
+
+    @Test
+    public void testRestApiObterAcesso() throws Exception {
+        DefaultMockMvcBuilder builder = MockMvcBuilders.webAppContextSetup(this.wac);
+        MockMvc mockMvc = builder.build();
+
+        Acesso acesso = new Acesso();
+        acesso.setDescricao("ROLE_OBTER_ACESSO_ID");
+
+        acesso = acessoRepository.save(acesso);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        ResultActions retornoApi = mockMvc.perform(MockMvcRequestBuilders.get("/obterAcesso/" + acesso.getId())
+                .content(objectMapper.writeValueAsString(acesso)).accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        String statusDoRetorno = String.valueOf(retornoApi.andReturn().getResponse().getStatus());
+        String retornoDaApi = retornoApi.andReturn().getResponse().getContentAsString();
+
+        assertEquals("200", statusDoRetorno);
+
+        Acesso acessoRetorno = objectMapper.readValue(retornoDaApi, Acesso.class);
+
+        assertEquals(acesso.getDescricao(), acessoRetorno.getDescricao());
+    }
+
+    @Test
     public void testCadastraAcesso() {
         Acesso acesso = new Acesso();
         acesso.setDescricao("ROLE_ALUNO");

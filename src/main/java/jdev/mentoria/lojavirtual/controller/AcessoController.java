@@ -7,10 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Controller
 @RestController
@@ -37,4 +36,24 @@ public class AcessoController {
         acessoRepository.deleteById(acesso.getId());
         return new ResponseEntity("Acesso removido - ID: " + acesso.getId(), HttpStatus.OK);
     }
+
+    @ResponseBody /*Dar retorno da api*/
+    @DeleteMapping(value = "**/deleteAcessoPorId/{id}")
+    public ResponseEntity<?> deleteAcessoPorId(@PathVariable("id") Long id) {
+
+        acessoRepository.deleteById(id);
+        return new ResponseEntity("Acesso removido - ID: " + id, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/obterAcesso/{id}")
+    public ResponseEntity<Acesso> obterAcesso(@PathVariable("id") Long id) {
+        Optional<Acesso> acessoOptional = acessoRepository.findById(id);
+
+        if (acessoOptional.isPresent()) {
+            return ResponseEntity.ok(acessoOptional.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
