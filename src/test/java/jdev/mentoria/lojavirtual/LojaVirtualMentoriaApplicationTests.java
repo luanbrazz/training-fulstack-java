@@ -1,10 +1,10 @@
 package jdev.mentoria.lojavirtual;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jdev.mentoria.lojavirtual.controller.AcessoController;
 import jdev.mentoria.lojavirtual.model.Acesso;
 import jdev.mentoria.lojavirtual.repository.AcessoRepository;
-import jdev.mentoria.lojavirtual.service.AcessoService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,9 +24,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class LojaVirtualMentoriaApplicationTests {
 
     @Autowired
-    private AcessoService acessoService;
-
-    @Autowired
     private AcessoRepository acessoRepository;
 
     @Autowired
@@ -42,7 +39,7 @@ public class LojaVirtualMentoriaApplicationTests {
         MockMvc mockMvc = builder.build();
 
         Acesso acesso = new Acesso();
-        acesso.setDescricao("ROLE_COMPRADOR");
+        acesso.setDescricao("ROLE_TESTE_CADASTRO_ACESSO");
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -57,6 +54,9 @@ public class LojaVirtualMentoriaApplicationTests {
         Acesso objetoRetorno = objectMapper.readValue(retornoDaApi, Acesso.class);
 
         assertEquals(acesso.getDescricao(), objetoRetorno.getDescricao());
+
+        acessoRepository.deleteById(objetoRetorno.getId());
+
     }
 
     /*Teste do end point delete acesso*/
@@ -84,6 +84,7 @@ public class LojaVirtualMentoriaApplicationTests {
 
         assertEquals("Acesso removido - ID: " + acesso.getId(), retornoDaApi);
         assertEquals("200", statusDoRetorno);
+
     }
 
     @Test
@@ -136,6 +137,37 @@ public class LojaVirtualMentoriaApplicationTests {
         Acesso acessoRetorno = objectMapper.readValue(retornoDaApi, Acesso.class);
 
         assertEquals(acesso.getDescricao(), acessoRetorno.getDescricao());
+
+        acessoRepository.deleteById(acesso.getId());
+    }
+
+    @Test
+    public void testRestApiBuscarPorDesc() throws Exception {
+        DefaultMockMvcBuilder builder = MockMvcBuilders.webAppContextSetup(this.wac);
+        MockMvc mockMvc = builder.build();
+
+        Acesso acesso = new Acesso();
+        acesso.setDescricao("ROLE_TESTE_OBTER_LIST_POR_DESCRICAO");
+
+        acesso = acessoRepository.save(acesso);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        ResultActions retornoApi = mockMvc.perform(MockMvcRequestBuilders.get("/buscarPorDesc/" + acesso.getDescricao())
+                .content(objectMapper.writeValueAsString(acesso)).accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON));
+
+        String statusDoRetorno = String.valueOf(retornoApi.andReturn().getResponse().getStatus());
+        String retornoDaApi = retornoApi.andReturn().getResponse().getContentAsString();
+
+        assertEquals("200", statusDoRetorno);
+        List<Acesso> retornoApiList = objectMapper.readValue(retornoDaApi, new TypeReference<List<Acesso>>() {
+        });
+
+        assertEquals(1, retornoApiList.size());
+
+
+        acessoRepository.deleteById(acesso.getId());
     }
 
     @Test

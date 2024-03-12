@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -51,6 +52,17 @@ public class AcessoController {
 
         if (acessoOptional.isPresent()) {
             return ResponseEntity.ok(acessoOptional.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping(value = "/buscarPorDesc/{desc}")
+    public ResponseEntity<List<Acesso>> buscarPorDesc(@PathVariable("desc") String desc) {
+        List<Acesso> acessos = acessoRepository.buscarAcessoDesc(desc);
+
+        if (!acessos.isEmpty()) {
+            return ResponseEntity.ok(acessos);
         } else {
             return ResponseEntity.notFound().build();
         }
