@@ -27,6 +27,9 @@ public abstract class Pessoa implements Serializable {
     @Column(nullable = false)
     private  String telefone;
 
+    @Column
+    private String tipoPessoa;
+
 //  O código define uma relação entre as classes "Pessoa" e "Endereco" usando a anotação @OneToMany. O relacionamento é
 //  mapeado no lado oposto, onde a coluna "pessoa" é usada como referência. Também permite a remoção automática de
 //  "Enderecos" associados à "Pessoa" e aplica operações em cascata (salvar, atualizar, excluir) a essas associações.
@@ -34,6 +37,14 @@ public abstract class Pessoa implements Serializable {
 //  acessados, economizando recursos.
     @OneToMany(mappedBy = "pessoa", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Endereco> enderecos = new ArrayList<Endereco>();
+
+    public String getTipoPessoa() {
+        return tipoPessoa;
+    }
+
+    public void setTipoPessoa(String tipoPessoa) {
+        this.tipoPessoa = tipoPessoa;
+    }
 
     public Long getId() {
         return id;
