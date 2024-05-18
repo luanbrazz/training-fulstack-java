@@ -38,6 +38,7 @@ public class AcessoController {
         return new ResponseEntity("Acesso removido - ID: " + acesso.getId(), HttpStatus.OK);
     }
 
+    //    @Secured({"ROLE_GERENTE", "ROLE_ADMIN"})
     @ResponseBody /*Dar retorno da api*/
     @DeleteMapping(value = "**/deleteAcessoPorId/{id}")
     public ResponseEntity<?> deleteAcessoPorId(@PathVariable("id") Long id) {
