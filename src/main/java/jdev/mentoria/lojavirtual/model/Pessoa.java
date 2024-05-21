@@ -30,6 +30,9 @@ public abstract class Pessoa implements Serializable {
     @Column
     private String tipoPessoa;
 
+//    @OneToMany(mappedBy = "pessoa", fetch = FetchType.LAZY)
+//    private List<Usuario> usuarios = new ArrayList<>();
+
 //  O código define uma relação entre as classes "Pessoa" e "Endereco" usando a anotação @OneToMany. O relacionamento é
 //  mapeado no lado oposto, onde a coluna "pessoa" é usada como referência. Também permite a remoção automática de
 //  "Enderecos" associados à "Pessoa" e aplica operações em cascata (salvar, atualizar, excluir) a essas associações.

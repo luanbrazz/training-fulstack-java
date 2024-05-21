@@ -39,7 +39,7 @@ public class LojaVirtualMentoriaApplicationTests {
         MockMvc mockMvc = builder.build();
 
         Acesso acesso = new Acesso();
-        acesso.setDescricao("ROLE_TESTE_CADASTRO_ACESSO");
+        acesso.setDescricao("ROLE_ADMIN");
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -55,7 +55,7 @@ public class LojaVirtualMentoriaApplicationTests {
 
         assertEquals(acesso.getDescricao(), objetoRetorno.getDescricao());
 
-        acessoRepository.deleteById(objetoRetorno.getId());
+//        acessoRepository.deleteById(objetoRetorno.getId());
 
     }
 

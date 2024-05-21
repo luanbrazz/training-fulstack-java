@@ -30,6 +30,7 @@ public class PessoaJuridica extends Pessoa implements Serializable {
 
     @Column(nullable = false)
     private String razaoSocial;
+
     private String categoria;
 
     public String getCnpj() {

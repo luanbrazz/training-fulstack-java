@@ -31,7 +31,7 @@ public class Usuario implements UserDetails {
     @Temporal(TemporalType.DATE)
     private Date dataAtualSenha;
 
-    @OneToMany(fetch = FetchType.LAZY) // Define um relacionamento de um-para-muitos com a entidade Acesso.
+    @OneToMany(fetch = FetchType.EAGER) // Define um relacionamento de um-para-muitos com a entidade Acesso.
 // Define uma tabela de junção chamada "usuario_acesso" para mapear o relacionamento entre "Usuario" e "Acesso".
     @JoinTable(
             name = "usuario_acesso",
@@ -63,6 +63,18 @@ public class Usuario implements UserDetails {
             )
     )
     private List<Acesso> acessos; // Lista de acessos associados ao usuário.
+
+    @ManyToOne
+    @JoinColumn(name = "pessoa_id", foreignKey = @ForeignKey(name = "pessoa_fk"))
+    private Pessoa pessoa;
+
+    public Pessoa getPessoa() {
+        return pessoa;
+    }
+
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
+    }
 
     public Long getId() {
         return id;
