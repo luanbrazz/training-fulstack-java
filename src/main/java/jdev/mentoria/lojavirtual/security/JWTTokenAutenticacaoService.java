@@ -1,5 +1,6 @@
 package jdev.mentoria.lojavirtual.security;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
@@ -23,7 +24,7 @@ public class JWTTokenAutenticacaoService {
     // Logger for logging errors and important information
     private static final Logger logger = Logger.getLogger(JWTTokenAutenticacaoService.class.getName());
 
-    // TOKEN COM VALIDADE DE 10 DIAS
+    // TOKEN COM VALIDADE DE 10 DIAS (10 * 24 * 60 * 60 * 1000)
     private static final long EXPIRATION_TIME_MS = 10 * 24 * 60 * 60 * 1000;
 
     /*private static final String SECRET = System.getenv("JWT_SECRET_KEY");*/
@@ -77,15 +78,15 @@ public class JWTTokenAutenticacaoService {
             } catch (SignatureException e) {
                 logger.severe("O token JWT é inválido: " + e.getMessage());
                 response.getWriter().write("O token JWT é inválido: " + e.getMessage());
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Define o status para 401
+            } catch (ExpiredJwtException e) {
+                logger.severe("Token expirado: " + e.getMessage());
+                response.getWriter().write("Token expirado, Efetue novamente o Login! \n" + e.getMessage());
             } catch (UsernameNotFoundException e) {
                 logger.severe("Usuário não encontrado: " + e.getMessage());
                 response.getWriter().write("Usuário não encontrado: " + e.getMessage());
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Define o status para 401
             } catch (Exception e) {
                 logger.severe("Erro ao processar o token JWT: " + e.getMessage());
                 response.getWriter().write("Erro ao processar o token JWT: " + e.getMessage());
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // Define o status para 500
             } finally {
                 liberacaoCors(response);
             }
