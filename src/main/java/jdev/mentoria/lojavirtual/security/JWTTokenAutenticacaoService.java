@@ -2,15 +2,18 @@ package jdev.mentoria.lojavirtual.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
 import jdev.mentoria.lojavirtual.ApplicationContextLoad;
 import jdev.mentoria.lojavirtual.model.Usuario;
 import jdev.mentoria.lojavirtual.repository.UsuarioRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Date;
 import java.util.logging.Logger;
 
@@ -44,7 +47,7 @@ public class JWTTokenAutenticacaoService {
         response.getWriter().write("{\"Authorization\": \"" + token + "\"}");
     }
 
-    public Authentication getAuthentication(HttpServletRequest request, HttpServletResponse response) {
+    public Authentication getAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Obtém o token do cabeçalho da requisição
         String token = request.getHeader(HEADER_STRING);
 
@@ -71,12 +74,23 @@ public class JWTTokenAutenticacaoService {
                         return new UsernamePasswordAuthenticationToken(usuario.getLogin(), usuario.getSenha(), usuario.getAuthorities());
                     }
                 }
-            } catch (Exception e) {
+            } catch (SignatureException e) {
                 logger.severe("O token JWT é inválido: " + e.getMessage());
+                response.getWriter().write("O token JWT é inválido: " + e.getMessage());
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Define o status para 401
+            } catch (UsernameNotFoundException e) {
+                logger.severe("Usuário não encontrado: " + e.getMessage());
+                response.getWriter().write("Usuário não encontrado: " + e.getMessage());
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Define o status para 401
+            } catch (Exception e) {
+                logger.severe("Erro ao processar o token JWT: " + e.getMessage());
+                response.getWriter().write("Erro ao processar o token JWT: " + e.getMessage());
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // Define o status para 500
+            } finally {
+                liberacaoCors(response);
             }
         }
 
-        liberacaoCors(response);
         return null;
     }
 
