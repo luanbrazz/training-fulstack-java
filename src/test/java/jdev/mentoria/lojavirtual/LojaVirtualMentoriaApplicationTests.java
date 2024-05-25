@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Calendar;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,7 +40,7 @@ public class LojaVirtualMentoriaApplicationTests {
         MockMvc mockMvc = builder.build();
 
         Acesso acesso = new Acesso();
-        acesso.setDescricao("ROLE_ADMIN");
+        acesso.setDescricao("ROLE_ADMIN" + Calendar.getInstance().getTimeInMillis());
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -55,7 +56,7 @@ public class LojaVirtualMentoriaApplicationTests {
 
         assertEquals(acesso.getDescricao(), objetoRetorno.getDescricao());
 
-//        acessoRepository.deleteById(objetoRetorno.getId());
+        acessoRepository.deleteById(objetoRetorno.getId());
 
     }
 
