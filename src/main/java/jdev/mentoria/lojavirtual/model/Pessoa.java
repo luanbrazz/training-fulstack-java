@@ -114,4 +114,5 @@ public abstract class Pessoa implements Serializable {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }
