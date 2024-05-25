@@ -21,8 +21,8 @@ public class Usuario implements UserDetails {
     // Configura a geração automática de valores para a chave primária.
     private Long id;
 
-    @Column(nullable = false)
-    private String login; // Campo para armazenar o login do usuário.
+    @Column(nullable = false, unique = true)
+    private String login; // definido como unico para amarrar a apenas uma empresa
 
     @Column(nullable = false)
     private String senha; // Campo para armazenar a senha do usuário.
