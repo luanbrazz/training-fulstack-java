@@ -21,6 +21,16 @@ import java.util.List;
 @ControllerAdvice
 public class ControleExcecoes extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler(ExceptionMentoriaJava.class)
+    public ResponseEntity<Object> handleExceptionCustom(ExceptionMentoriaJava ex) {
+        ObjetoErroDTO objetoErroDTO = new ObjetoErroDTO();
+
+        objetoErroDTO.setError(ex.getMessage());
+        objetoErroDTO.setCode(HttpStatus.OK.toString());
+
+        return new ResponseEntity<Object>(objetoErroDTO, HttpStatus.OK);
+    }
+
     @ExceptionHandler({Exception.class, RuntimeException.class, Throwable.class}) /*lista de exeções para capturar*/
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
