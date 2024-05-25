@@ -64,9 +64,23 @@ public class Usuario implements UserDetails {
     )
     private List<Acesso> acessos; // Lista de acessos associados ao usuário.
 
-    @ManyToOne
-    @JoinColumn(name = "pessoa_id", foreignKey = @ForeignKey(name = "pessoa_fk"))
+    @ManyToOne(targetEntity = Pessoa.class)
+    @JoinColumn(name = "pessoa_id", nullable = false,
+            foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk"))
     private Pessoa pessoa;
+
+    @ManyToOne(targetEntity = Pessoa.class)
+    @JoinColumn(name = "empresa_id", nullable = false,
+            foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
+    private Pessoa empresa;
+
+    public Pessoa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Pessoa empresa) {
+        this.empresa = empresa;
+    }
 
     public Pessoa getPessoa() {
         return pessoa;
