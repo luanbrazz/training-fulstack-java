@@ -1,8 +1,7 @@
 package jdev.mentoria.lojavirtual;
 
+import jdev.mentoria.lojavirtual.controller.PessoaController;
 import jdev.mentoria.lojavirtual.model.PessoaJuridica;
-import jdev.mentoria.lojavirtual.repository.PessoaRepository;
-import jdev.mentoria.lojavirtual.service.PessoaUserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,31 +14,21 @@ import java.util.Calendar;
 public class TestePessoaUsuario {
 
     @Autowired
-    private PessoaUserService pessoaUserService;
-
-    @Autowired
-    private PessoaRepository pessoaRepository;
+    private PessoaController pessoaController;
 
     @Test
-    public void testCadPessoa() {
+    public void testCadPessoa() throws ExceptionMentoriaJava {
 
         PessoaJuridica pessoaJuridica = new PessoaJuridica();
-        pessoaJuridica.setCnpj(String.valueOf(Calendar.getInstance().getTimeInMillis()));
-        pessoaJuridica.setInscEstadual((String.valueOf(Calendar.getInstance().getTimeInMillis())));
-        pessoaJuridica.setInscMunicipal((String.valueOf(Calendar.getInstance().getTimeInMillis())));
-        pessoaJuridica.setRazaoSocial((String.valueOf(Calendar.getInstance().getTimeInMillis())));
-        pessoaJuridica.setNome("Empresa Ficticia");
-        pessoaJuridica.setNomeFantasia("Fantasia Empresa Ficticia");
+        pessoaJuridica.setCnpj("" + Calendar.getInstance().getTimeInMillis());
+        pessoaJuridica.setNome("Empresa Luan");
         pessoaJuridica.setEmail("empresa@ficticia.com");
         pessoaJuridica.setTelefone("0147896555");
-        pessoaJuridica.setEmpresa(pessoaJuridica);
-        pessoaRepository.save(pessoaJuridica);
+        pessoaJuridica.setInscEstadual((String.valueOf(Calendar.getInstance().getTimeInMillis())));
+        pessoaJuridica.setInscMunicipal((String.valueOf(Calendar.getInstance().getTimeInMillis())));
+        pessoaJuridica.setNomeFantasia("Fantasia Empresa Ficticia");
+        pessoaJuridica.setRazaoSocial((String.valueOf(Calendar.getInstance().getTimeInMillis())));
+        pessoaController.salvarPj(pessoaJuridica);
 
-//        PessoaFisica pessoaFisica = new PessoaFisica();
-//        pessoaFisica.setCpf(String.valueOf(Calendar.getInstance().getTimeInMillis()));
-//        pessoaFisica.setNome("Luan Braz");
-//        pessoaFisica.setEmail("luan@gmail.com");
-//        pessoaFisica.setTelefone("01299877458");
-//        pessoaFisica.setEmpresa(pessoaFisica);
     }
 }
